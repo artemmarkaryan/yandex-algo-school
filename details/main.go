@@ -21,15 +21,33 @@ package main
 
 import "fmt"
 
-func main() {
-	var n, k, m, details int
-	_, _ = fmt.Scanf("%v %v %v", &n, &k, &m)
+func Evaluate(metal, billetW, detailW int) (result int) {
+	var metalLeft int
 
-	for n >= k {
-		billets := n / k
-		n = n % k
-		details += (k / m) * billets
-		n += (k % m) * details
+	detailsPerBillet := billetW / detailW
+	metalLeftPerBillet := billetW % detailW
+
+	if detailsPerBillet == 0 {
+		return
 	}
-	fmt.Print(details)
+
+	for metal >= billetW {
+		billets := metal / billetW
+		metalLeft += metal % billetW
+
+		result += billets * detailsPerBillet
+		metalLeft += billets * metalLeftPerBillet
+
+		metal = metalLeft
+		metalLeft = 0
+	}
+
+	return
+}
+
+func main() {
+	var metal, billetW, detailW int
+	_, _ = fmt.Scanf("%v %v %v", &metal, &billetW, &detailW)
+
+	fmt.Print(Evaluate(metal, billetW, detailW))
 }
